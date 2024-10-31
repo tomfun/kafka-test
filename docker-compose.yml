@@ -41,10 +41,28 @@ services:
       - while true; do echo "Message at $(date)"; sleep 0.001; done | exec kafka-console-producer.sh --timeout 1000 --topic test-topic --bootstrap-server kafka:9092
     depends_on:
       - kafka
+  kafka-node-producer:
+    build:
+      context: .
+      dockerfile: node-consumer.Dockerfile
+    #    volumes:
+    #      - ./rdkafka:/app
+    command: npm run producer
+    depends_on:
+      - kafka
 
   kafka-consumer:
     image: bitnami/kafka:latest
     command: kafka-console-consumer.sh --timeout-ms 300000 --topic test-topic --bootstrap-server kafka:9092 --group test-consumer-group --property print.partition=true --consumer-property partition.assignment.strategy=org.apache.kafka.clients.consumer.RangeAssignor --consumer-property rebalance.timeout.ms=4200 --consumer-property session.timeout.ms=3500 --consumer-property max.poll.interval.ms=3800
+    depends_on:
+      - kafka
+  kafka-node-consumer:
+    build:
+      context: .
+      dockerfile: node-consumer.Dockerfile
+#    volumes:
+#      - ./rdkafka:/app
+    command: npm run consumer
     depends_on:
       - kafka
 

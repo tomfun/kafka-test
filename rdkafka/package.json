@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "scripts": {
+    "consumer": "node src/consumer.js",
+    "producer": "node src/producer.js"
+  },
+  "dependencies": {
+    "node-rdkafka": "^3.1.1"
+  }
+}
